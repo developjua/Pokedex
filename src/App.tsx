@@ -1,11 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import DetailPage from "./components/Details"
 import Bookmark from "./components/Bookmark"
 import AllPokemon from './components/AllPokemon';
 import Abilities from './components/Abilities';
 import Group from './components/Group';
 import Habitat from './components/Habitat';
-import Location from './components/Location';
 import Species from './components/Species';
 import Allfilter from "./components/Allfilter"
 import SearchPage from "./components/Searchpage"

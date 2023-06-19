@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../assets/pokeball-icon.png';
 import { Link } from 'react-router-dom';
-import BookmarkPage from '../components/Bookmark';
 
 interface NavbarProps {
   activeLink: string;

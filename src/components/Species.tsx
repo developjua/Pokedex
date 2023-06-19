@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,21 +6,33 @@ import 'react-toastify/dist/ReactToastify.css';
 import Loader from './Loader';
 import PokemonCard from './PokemonCard';
 
+
+interface PokemonType {
+  type: {
+    name: string;
+  };
+}
+
+interface Pokemon {
+  id: number;
+  name: string;
+  types: PokemonType[];
+}
+
 const Species = () => {
-  const [pokemonList, setPokemonList] = useState([]);
+ const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [nextUrl, setNextUrl] = useState(null);
-  const [fetchedIds, setFetchedIds] = useState([]);
 
   const navigate = useNavigate();
 
-  const fetchPokemon = async (url, limit) => {
+  const fetchPokemon = async (url: string, limit: string) => {
     try {
       const response = await fetch(`${url}?limit=${limit}`);
       const data = await response.json();
       const pokemonData = await Promise.all(
-        data.results.map(async (pokemon) => {
+        data.results.map(async (pokemon:any) => {
           const response = await fetch(pokemon.url);
           const pokemonDetails = await response.json();
           const response2 = await fetch(pokemonDetails.varieties[0].pokemon.url);
@@ -72,7 +84,7 @@ const Species = () => {
         const response = await fetch(nextUrl);
         const data = await response.json();
         const pokemonData = await Promise.all(
-          data.results.map(async (pokemon) => {
+          data.results.map(async (pokemon:any) => {
             const response = await fetch(pokemon.url);
             const pokemonDetails = await response.json();
             const response2 = await fetch(pokemonDetails.varieties[0].pokemon.url);
@@ -96,7 +108,7 @@ const Species = () => {
     }
   };
 
-  const handlePokemonClick = (id) => {
+  const handlePokemonClick = (id:number|string) => {
     navigate(`/pokemon/${id}`);
   };
 
@@ -112,15 +124,13 @@ const Species = () => {
             key={pokemon.id}
             id={pokemon.id}
             name={pokemon.name}
-            types={pokemon.types.map((type) => type.type.name)}
+            types={pokemon.types.map((type:PokemonType) => type.type.name)}
             handlePokemonClick={handlePokemonClick}
           />
         ))}
       </div>
       {isLoading && (
-        <div className="flex items-center justify-center w-full h-20">
           <Loader />
-        </div>
       )}
       <ToastContainer />
     </div>

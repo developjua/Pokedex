@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PokemonCard from './PokemonCard';
 import Loader from './Loader';
 
+interface Pokemon {
+  id: number;
+  name: string;
+  types: string[];
+}
+
 const AllPokemon = () => {
-  const [pokemonList, setPokemonList] = useState([]);
+  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [nextUrl, setNextUrl] = useState(null);
-  const [activeLink, setActiveLink] = useState('/list');
-  const [fetchedIds, setFetchedIds] = useState([]);
+  const [nextUrl, setNextUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  const fetchPokemon = async (url, limit) => {
+  const fetchPokemon = async (url: string, limit: number) => {
     try {
       const response = await fetch(`${url}?limit=${limit}`);
       const data = await response.json();
       const pokemonData = await Promise.all(
-        data.results.map(async (pokemon) => {
+        data.results.map(async (pokemon: any) => {
           const response = await fetch(pokemon.url);
           const pokemonDetails = await response.json();
           return {
             id: pokemonDetails.id,
             name: pokemon.name,
-            types: pokemonDetails.types.map((type) => type.type.name),
+            types: pokemonDetails.types.map((type: any) => type.type.name),
           };
         })
       );
@@ -49,13 +53,13 @@ const AllPokemon = () => {
           const response = await fetch(nextUrl);
           const data = await response.json();
           const pokemonData = await Promise.all(
-            data.results.map(async (pokemon) => {
+            data.results.map(async (pokemon: any) => {
               const response = await fetch(pokemon.url);
               const pokemonDetails = await response.json();
               return {
                 id: pokemonDetails.id,
                 name: pokemon.name,
-                types: pokemonDetails.types.map((type) => type.type.name),
+                types: pokemonDetails.types.map((type: any) => type.type.name),
               };
             })
           );
@@ -88,13 +92,13 @@ const AllPokemon = () => {
     };
   }, []);
 
+  const handlePokemonClick = (id: number) => {
+    navigate(`/pokemon/${id}`);
+  };
+
   if (error) {
     navigate('/');
   }
-
-  const handlePokemonClick = (id) => {
-    navigate(`/pokemon/${id}`);
-  };
 
   return (
     <div className="h-screen w-screen bg-slate-800">

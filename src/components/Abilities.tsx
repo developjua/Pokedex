@@ -2,13 +2,25 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PokemonCard from './PokemonCard';
-import Loader from './Loader'; 
+import Loader from './Loader';
 
+interface Pokemon {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+}
 
 const Abilities: React.FC = () => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [abilityNames, setAbilityNames] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // State to track loading state
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,14 +50,14 @@ const Abilities: React.FC = () => {
           response.data.pokemon.map((poke: any) => poke.pokemon)
         );
         const pokemonResponses = await Promise.all(
-          abilityDataList.flat().map((pokemonData) => axios.get<Pokemon>(pokemonData.url))
+          abilityDataList.flat().map((pokemonData) => axios.get(pokemonData.url))
         );
         pokemonResponses.forEach((response) => {
           const pokemon: Pokemon = response.data;
           pokemonData.push(pokemon);
         });
         setPokemonList(pokemonData);
-        setIsLoading(false); 
+        setIsLoading(false);
       } catch (error) {
         console.error('Error retrieving Pokémon data:', error);
       }
@@ -54,7 +66,7 @@ const Abilities: React.FC = () => {
     namesfetch();
   }, [abilityNames]);
 
-  const handlePokemonClick = (id: string) => {
+  const handlePokemonClick = (id: string | number) => {
     navigate(`/pokemon/${id}`);
   };
 
@@ -73,11 +85,11 @@ const Abilities: React.FC = () => {
     return Object.entries(sections).map(([abilityName, pokemonData]) => (
       <div key={abilityName} className="bg-slate-800">
         <h2 className="text-xl font-bold mb-2 text-white">{abilityName}</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen overflow-y-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen overflow-y-auto">
           {pokemonData.map((pokemon: Pokemon) => (
             <PokemonCard
-              key={pokemon.name}
-              id={pokemon.id} 
+              key={pokemon.id}
+              id={pokemon.id}
               name={pokemon.name}
               types={pokemon.types.map((type) => type.type.name)}
               handlePokemonClick={handlePokemonClick}
@@ -91,9 +103,8 @@ const Abilities: React.FC = () => {
   return (
     <div>
       {isLoading ? (
-        <div className="flex items-center justify-center h-20">
           <Loader />
-        </div>
+        
       ) : (
         renderSections()
       )}

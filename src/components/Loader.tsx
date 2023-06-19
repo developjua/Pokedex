@@ -1,4 +1,4 @@
-import React from "react";
+
 import pokeballLoader from "../assets/pokeball-loader.gif";
 const Loader:React.FC=()=> {
   return (

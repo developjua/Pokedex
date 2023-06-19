@@ -1,7 +1,6 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PokemonCard = ({ name, types, id, handlePokemonClick}) => {
+const PokemonCard = ({ name, types, id, handlePokemonClick }: { name: string, types: string[], id: number, handlePokemonClick: (id: number|string) => void }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {

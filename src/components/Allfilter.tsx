@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import AllPokemon from './AllPokemon';
 import Abilities from './Abilities';
 import Group from './Group';
@@ -7,9 +6,12 @@ import Habitat from './Habitat';
 import Species from './Species';
 import Navbar from '../section/Navbar';
 
+
+
+
 const Pokelist = () => {
-  const navigate = useNavigate();
   const [activeComponent, setActiveComponent] = useState('AllPokemon');
+    const [activeLink, setActiveLink] = useState('/list');
 
   const handleNavigation = (componentName: string) => {
     setActiveComponent(componentName);
@@ -34,7 +36,7 @@ const Pokelist = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar activeLink="/list" setActiveLink={setActiveLink} />
       <div className="flex flex-col items-center mt-4 bg-slate-800 h-screen w-screen">
         <div className="flex justify-center mt-20">
           <button className="mr-4 bg-blue-500 text-white py-2 px-4 rounded-md" onClick={() => handleNavigation('AllPokemon')}>

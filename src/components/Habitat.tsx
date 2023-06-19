@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +7,12 @@ import Loader from './Loader';
 import PokemonCard from './PokemonCard';
 
 const Habitat = () => {
-  const [pokemonData, setPokemonData] = useState([]);
+ const [pokemonData, setPokemonData] = useState<{ habitat: string; pokemon: { id: number; name: string; image: string; types: string[] }[] }[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+
+
 
 
   useEffect(() => {
@@ -20,11 +23,11 @@ const Habitat = () => {
         const habitats = data.results;
 
         const fetchedData = await Promise.all(
-          habitats.map(async (habitat) => {
+          habitats.map(async (habitat: { url: string; name: string }) => {
             const habitatResponse = await fetch(habitat.url);
             const habitatData = await habitatResponse.json();
 
-            const pokemonPromises = habitatData.pokemon_species.map(async (pokemon) => {
+            const pokemonPromises = habitatData.pokemon_species.map(async (pokemon: { url: string }) => {
               const pokemonResponse = await fetch(pokemon.url);
               if (!pokemonResponse.ok) {
                 return null;
@@ -32,7 +35,7 @@ const Habitat = () => {
               const pokemonData = await pokemonResponse.json();
               const typesResponse = await fetch(pokemonData.varieties[0].pokemon.url);
               const typesData = await typesResponse.json();
-              const types = typesData.types?.map((type) => type.type.name) || [];
+                 const types = typesData.types?.map((type: { type: { name: string } }) => type.type.name) || [];
               if (!types.length) {
                 return null; 
               }
@@ -68,32 +71,31 @@ const Habitat = () => {
     navigate(`/pokemon/${id}`);
   };
 
-  return (
-    <div>
-      {isLoading ? (
-        <Loader /> 
-      ) : (
-        pokemonData.map((category) => (
-          <div key={category.habitat}>
-            <h2 className="text-xl font-bold mb-2 text-white">{category.habitat}</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen overflow-y-auto">
-
-              {category.pokemon.map((pokemon) => (
-                <PokemonCard
-                  key={pokemon.id}
-                  name={pokemon.name}
-                  types={pokemon.types.map((type) => type.type?.name)}
-                  id={pokemon.id}
-                  image={pokemon.image}
-                   handlePokemonClick={handlePokemonClick}
-                />
-              ))}
-            </div>
+return (
+  <div>
+    {isLoading ? (
+      <Loader />
+    ) : (
+      pokemonData.map((category) => (
+        <div key={category.habitat}>
+          <h2 className="text-xl font-bold mb-2 text-white">{category.habitat}</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen overflow-y-auto">
+            {category.pokemon.map((pokemon) => (
+              <PokemonCard
+                key={pokemon.id}
+                name={pokemon.name}
+                types={pokemon.types.map((type) => type)}
+                id={pokemon.id}
+                handlePokemonClick={handlePokemonClick}
+              />
+            ))}
           </div>
-        ))
-      )}
-    </div>
-  );
+        </div>
+      ))
+    )}
+  </div>
+);
+
 };
 
 export default Habitat;

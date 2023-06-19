@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
+import { FaBookmark } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from '../section/Navbar';
@@ -20,9 +20,8 @@ const BookmarkPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeLink, setActiveLink] = useState('/Bookmarks');
 
-
   useEffect(() => {
-    const storedBookmarks = JSON.parse(localStorage.getItem('bookmarkedPokemons'));
+    const storedBookmarks:string|null = JSON.parse(localStorage.getItem('bookmarkedPokemons'));
     if (storedBookmarks) {
       setBookmarkedPokemons(storedBookmarks);
     }
@@ -69,7 +68,9 @@ const BookmarkPage: React.FC = () => {
     <div className="bg-slate-800 h-screen mt-16">
       <Navbar activeLink="/Bookmarks" setActiveLink={setActiveLink} />
 
-     <div className="mt-10 m-10"> <h1 className="text-4xl font-bold my-8 text-center text-zinc-100 ">Bookmarked Pokemon</h1></div>
+      <div className="mt-10 m-10">
+        <h1 className="text-4xl font-bold my-8 text-center text-zinc-100">Bookmarked Pokemon</h1>
+      </div>
       {isLoading ? (
         <div className="flex items-center justify-center w-full">
           <Loader />
@@ -88,7 +89,7 @@ const BookmarkPage: React.FC = () => {
                   className="bookmark-button mt-4 flex items-center justify-center bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md ml-8"
                   onClick={() => removeBookmark(String(pokemon.pokemonId))}
                 >
-                  <FaRegBookmark className="mr-2" />
+                  <FaBookmark className="mr-2" />
                   Remove Bookmark
                 </button>
               </div>

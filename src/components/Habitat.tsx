@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 import Loader from './Loader';
 import PokemonCard from './PokemonCard';
@@ -8,6 +9,8 @@ import PokemonCard from './PokemonCard';
 const Habitat = () => {
   const [pokemonData, setPokemonData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchPokemonByHabitat = async () => {
@@ -61,6 +64,9 @@ const Habitat = () => {
 
     fetchPokemonByHabitat();
   }, []);
+   const handlePokemonClick = (id: string) => {
+    navigate(`/pokemon/${id}`);
+  };
 
   return (
     <div>
@@ -70,15 +76,16 @@ const Habitat = () => {
         pokemonData.map((category) => (
           <div key={category.habitat}>
             <h2 className="text-xl font-bold mb-2 text-white">{category.habitat}</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen mt-20 overflow-y-auto">
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen overflow-y-auto">
 
               {category.pokemon.map((pokemon) => (
                 <PokemonCard
                   key={pokemon.id}
                   name={pokemon.name}
-                  types={pokemon.types.map((type) => type.type.name)}
+                  types={pokemon.types.map((type) => type.type?.name)}
                   id={pokemon.id}
                   image={pokemon.image}
+                   handlePokemonClick={handlePokemonClick}
                 />
               ))}
             </div>

@@ -73,17 +73,18 @@ const Group = () => {
         pokemonData.map((category) => (
           <div key={category.eggGroup}>
             <h2 className="text-xl font-bold mb-2 text-white">{category.eggGroup}</h2>
-             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen mt-20 overflow-y-auto">
+             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 h-screen w-screen  overflow-y-auto">
 
-              {category.pokemon.map((pokemon) => (
-                <PokemonCard
-                  key={pokemon.id}
-                  name={pokemon.name}
-                  types={pokemon.types.map((type) => type.type.name)}
-                  id={pokemon.id}
-                  handlePokemonClick={handlePokemonClick}
-                />
-              ))}
+            {category.pokemon.map((pokemon) => (
+  <PokemonCard
+    key={pokemon.id}
+    name={pokemon.name}
+    types={pokemon.types.map((type) => type.type?.name)}
+    id={pokemon.id}
+    handlePokemonClick={handlePokemonClick}
+  />
+))}
+
             </div>
           </div>
         ))

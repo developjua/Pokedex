@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../section/Navbar";
 import Loader from "./Loader.tsx";
 import Logo from "../assets/pokeball-icon.png";
+import { Link } from 'react-router-dom';
 
 interface Pokemon {
   id: number;

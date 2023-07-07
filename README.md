@@ -1,6 +1,6 @@
 # Pokedex
 Getting Started with vite create
-This project was bootstrapped with create vite
+This project was bootstrapped with ReactJS, TailwindCSS
 Available Scripts
 
 In the project directory, you can run:
